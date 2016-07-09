@@ -7,6 +7,8 @@ from jinja2.exceptions import TemplateNotFound, TemplateSyntaxError
 import os
 import sqlite3
 
+database_cursor = None
+
 
 class PynetLoader(FileSystemLoader):
     """Loads template both from filesystem specified and from BytesIO.
@@ -60,10 +62,20 @@ def render_string_with_jinja(string_value, jinja_env, jinja_map):
     return rendered_string
 
 
+def db_connect(db_url=os.path.join(os.path.dirname(os.getcwd()), 'db.sqlite3')):
+    conn = sqlite3.connect(db_url)
+    cursor = conn.cursor()
+    return cursor
+
+
 def db_loader(template_name):
+    if not database_cursor:
+        global database_cursor
+        database_cursor = db_connect()
+    database_cursor.execute("select template_body from render_templates where template_name='%s'" % template_name)
+    result = database_cursor.fetchone()[0]  # might not work don't remember
+    return result
 
-    pass
 
-
-if __name__=='__main__':
+if __name__ == '__main__':
     pass
