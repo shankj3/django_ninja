@@ -1,0 +1,39 @@
+{% extends 'render/index.html' %}
+{% load staticfiles %}
+
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{% static 'render/new.css' %}"/>
+<form action="" method="post">
+    <h1>PYNET Ninja Rendering Form</h1>
+    {% csrf_token %}
+    <table width="100px">
+
+        <select name="choices">
+            {% for choice in form.render_type.choices %}
+            <option value="{{ choice }}">{{ choice }}</option>
+            {% endfor %}
+        </select>
+
+    </table><br><br>
+    <table width="950px">
+        <td valign="top">
+            {{ form.string_to_render.errors }}
+            <label for="{{ form.string_to_render.id_for_label }}">String to render with Ninja</label><br>
+            {{ form.string_to_render }}<br><br>
+        </td>
+        <td valign="top">
+            {{ form.map_to_render_with.errors }}
+            <label for="{{ form.map_to_render_with.id_for_label }}">Map to render string with</label><br>
+            {{ form.map_to_render_with }}
+        </td>
+        <td valign="top">
+            {{ form.rendered_output.errors }}
+            <label for="{{ form.rendered_output.id_for_label }}">Output</label><br>
+            {{ form.rendered_output }}
+        </td>
+    </table>
+    <input type="submit" value="Submit"/>
+
+</form>
+{% endblock %}
+<br><br>

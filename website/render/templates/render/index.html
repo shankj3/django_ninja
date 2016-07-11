@@ -1,9 +1,16 @@
-{% if latest_question_list %}
-<ul>
-    {% for question in latest_question_list %}
-    <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+    <title>PYNET Jinja/Ninja</title>
+</head>
+<body>
+
+<ul id="navigation">
+    {% for item in navigation %}
+    <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
     {% endfor %}
 </ul>
-{% else %}
-<p>No polls are available.</p>
-{% endif %}
+{% block body %}{% endblock %}
+</body>
+</html>
