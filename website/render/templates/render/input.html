@@ -3,12 +3,12 @@
 
 {% block body %}
 <link rel="stylesheet" type="text/css" href="{% static 'render/new.css' %}"/>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     <h1>Add Files to Database to be Extended from</h1>
     <h4>The filename is what you will call in other templates for include/extend/import/etc.</h4>
     {% csrf_token %}
     {{ form }}<br>
-    <input type="submit" value="Upload"/>
+    <input type="submit" value="Upload" enctype="multipart/form-data" />
 </form>
 {% endblock %}
 <br><br>

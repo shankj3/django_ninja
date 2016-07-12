@@ -1,0 +1,17 @@
+{% extends 'render/index.html' %}
+{% load staticfiles %}
+
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{% static 'render/new.css' %}"/>
+<h1>Template Repo</h1>
+
+<div id="left" style="height:900px;width:200px;border:2px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+{% for item in templates %}
+<a href="{{ item.template_name }}">{{ item.template_name }}</a><br>
+{% endfor %}
+</div>
+<div id="right" style="height:900px;width:700px;border:2px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+{{ template_body }}
+</div>
+
+{% endblock %}

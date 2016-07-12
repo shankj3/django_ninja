@@ -55,11 +55,14 @@ def db_loader(template):
         template_str = template.getvalue().decode()
         contents = template_str
         mtime = time.time()
+        print(template.getvalue().decode())
         filename = None  # could be a temp file name, None seemed apt enough. maybe the uid of test case?
         return contents, filename, mtime
     try:
         load = Templates.objects.get(template_name=template)
+
     except ObjectDoesNotExist:
+        print("askdlfjalsk;djf;DOESNOTEXIST")
         return ''
     return load.template_body
 
