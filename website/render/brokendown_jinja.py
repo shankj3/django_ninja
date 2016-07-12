@@ -6,28 +6,9 @@ from jinja2.utils import missing, object_type_repr
 from jinja2.exceptions import TemplateNotFound, TemplateSyntaxError
 import os
 import sqlite3
-
+from .models import Templates
+from django.core.exceptions import ObjectDoesNotExist
 database_cursor = None
-
-
-class PynetLoader(FileSystemLoader):
-    """Loads template both from filesystem specified and from BytesIO.
-        If the template isn't in the list of templates from FileSystemLoader
-        and is not in BytesIO as pynet_test_builder will pass it, it will raise
-        a TemplateNotFound exception"""
-    def get_source(self, environment, template):
-        # If template is of type BytesIO as set by PYNET test cases, decode it and return its value, with time
-        # as current time, and a filename of None.
-        if type(template) == io.BytesIO:
-            template_str = template.getvalue().decode(self.encoding)
-            contents = template_str
-            mtime = time.time()
-            filename = None  # could be a temp file name, None seemed apt enough. maybe the uid of test case?
-            return contents, filename, mtime
-        # If template is in the list of templates found by FileSystemLoader, render with its get_source
-        elif template in super(PynetLoader, self).list_templates():
-            return super(PynetLoader, self).get_source(environment, template)
-        raise TemplateNotFound(template)
 
 
 class Environment(environment.Environment):
@@ -68,13 +49,19 @@ def db_connect(db_url=os.path.join(os.path.dirname(os.getcwd()), 'db.sqlite3')):
     return cursor
 
 
-def db_loader(template_name):
-    if not database_cursor:
-        global database_cursor
-        database_cursor = db_connect()
-    database_cursor.execute("select template_body from render_templates where template_name='%s'" % template_name)
-    result = database_cursor.fetchone()[0]  # might not work don't remember
-    return result
+def db_loader(template):
+    # print(template_name.getvalue().decode())
+    if isinstance(template, io.BytesIO):
+        template_str = template.getvalue().decode()
+        contents = template_str
+        mtime = time.time()
+        filename = None  # could be a temp file name, None seemed apt enough. maybe the uid of test case?
+        return contents, filename, mtime
+    try:
+        load = Templates.objects.get(template_name=template)
+    except ObjectDoesNotExist:
+        return ''
+    return load.template_body
 
 
 if __name__ == '__main__':

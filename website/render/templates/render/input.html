@@ -1,0 +1,14 @@
+{% extends 'render/index.html' %}
+{% load staticfiles %}
+
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{% static 'render/new.css' %}"/>
+<form action="" method="post">
+    <h1>Add Files to Database to be Extended from</h1>
+    <h4>The filename is what you will call in other templates for include/extend/import/etc.</h4>
+    {% csrf_token %}
+    {{ form }}<br>
+    <input type="submit" value="Upload"/>
+</form>
+{% endblock %}
+<br><br>
