@@ -36,8 +36,15 @@ class KeepUndefined(Undefined):
 
 
 def render_string_with_jinja(string_value, jinja_env, jinja_map):
-    bytes_template = io.BytesIO()
-    bytes_template.write(string_value.encode('utf-8'))
+    # print(string_value)
+    if isinstance(string_value, str):
+        bytes_template = io.BytesIO()
+        bytes_template.write(string_value.encode('utf-8'))
+    # print(bytes_template.read())
+        bytes_template.seek(0)
+    else:
+        print(type(string_value))
+        bytes_template = string_value
     template = jinja_env.get_template(bytes_template)
     rendered_string = template.render(jinja_map)
     return rendered_string
@@ -50,7 +57,6 @@ def db_connect(db_url=os.path.join(os.path.dirname(os.getcwd()), 'db.sqlite3')):
 
 
 def db_loader(template):
-    # print(template_name.getvalue().decode())
     if isinstance(template, io.BytesIO):
         template_str = template.getvalue().decode()
         contents = template_str
@@ -60,10 +66,9 @@ def db_loader(template):
         return contents, filename, mtime
     try:
         load = Templates.objects.get(template_name=template)
-
+        templ_body = load.template_body
     except ObjectDoesNotExist:
-        print("askdlfjalsk;djf;DOESNOTEXIST")
-        return ''
+        return template
     return load.template_body
 
 

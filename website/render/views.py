@@ -45,7 +45,7 @@ def render_template(request):
         form = TemplateForm(request.POST)
         print(form.errors)
         if form.is_valid():
-            print('HIaksdjfl;asjdfklasjlkdfjasdklfj')
+            print('FORM IS VALID')
             env = jinj.Environment(loader=FunctionLoader(jinj.db_loader),
                                    undefined=jinj.KeepUndefined,
                                    block_start_string='{~',
@@ -62,6 +62,7 @@ def render_template(request):
                                      'string_to_render': form.cleaned_data['string_to_render']})
                 raise
             else:
+                # print('cleaned data',form.cleaned_data['string_to_render'])
                 generated = jinj.render_string_with_jinja(form.cleaned_data['string_to_render'], env, jinja_map)
                 # generated_safe = jsonhelp.check_then_dump_json([generated])[0]
                 # print(generated_safe)
