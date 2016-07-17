@@ -1,12 +1,13 @@
 {% extends 'render/index.html' %}
 {% load staticfiles %}
 
-{% block body %}
-<link rel="stylesheet" type="text/css" href="{% static 'render/new.css' %}"/>
+{% block content %}
+<div class="demo-container mdl-grid">
+
 <form action="" method="post">
     <h1>PYNET Ninja Rendering Form</h1>
-    {% csrf_token %}
-    <table width="100px">
+    <div class="render-map mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--4-col">
+    <table>
 
         <select name="choices">
             {% for choice in form.render_type.choices %}
@@ -34,6 +35,7 @@
     </table>
     <input type="submit" value="Submit"/>
 
+</div>
 </form>
+</div>
 {% endblock %}
-<br><br>

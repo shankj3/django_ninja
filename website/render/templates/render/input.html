@@ -1,14 +1,21 @@
 {% extends 'render/index.html' %}
 {% load staticfiles %}
 
-{% block body %}
-<link rel="stylesheet" type="text/css" href="{% static 'render/new.css' %}"/>
-<form action="" method="post" enctype="multipart/form-data">
-    <h1>Add Files to Database to be Extended from</h1>
-    <h4>The filename is what you will call in other templates for include/extend/import/etc.</h4>
+{% block content %}
+<div class="demo-container mdl-grid">
+        
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+        <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+          <form action="" method="POST" enctype="multipart/form-data">
+    <h4>Add Files to Database to be Extended from</h4>
+    <h6>The filename is what you will call in other templates for include/extend/import/etc.</h6>
     {% csrf_token %}
     {{ form }}<br>
     <input type="submit" value="Upload" enctype="multipart/form-data" />
 </form>
+          
+        </div>
+        
+      </div>
 {% endblock %}
 <br><br>

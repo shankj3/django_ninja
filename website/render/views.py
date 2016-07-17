@@ -78,10 +78,12 @@ def render_template(request):
 
 
 def input_template(request):
+    from pprint import pprint
+    ## http://stackoverflow.com/questions/15323880/how-to-take-data-from-textboxes-in-django-without-using-the-automated-model-form
     if request.method == 'POST':
-
+        pprint(vars(request))
         form = InputTemplate(request.POST, request.FILES)
-        print(request.FILES)
+        # print(request.FILES)
         if form.is_valid():
             handle_file_upload(form.cleaned_data['filename'], request.FILES['file'].read().decode())
             print(request.FILES['file'].read().decode())
