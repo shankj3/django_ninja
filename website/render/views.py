@@ -46,6 +46,7 @@ def render_template(request):
         print(form.errors)
         if form.is_valid():
             print('FORM IS VALID')
+            print(request.POST.get('choices'))
             env = jinj.Environment(loader=FunctionLoader(jinj.db_loader),
                                    undefined=jinj.KeepUndefined,
                                    block_start_string='{~',
@@ -53,12 +54,16 @@ def render_template(request):
                                    comment_start_string='{!',
                                    comment_end_string='!}')
             try:
-                jinja_map = json.loads(form.cleaned_data['map_to_render_with'])
-                pretty_dumped = json.dumps(jinja_map, indent=4)
-            except ValueError:
+                if form.cleaned_data['map_to_render_with']:
+                    jinja_map = json.loads(form.cleaned_data['map_to_render_with'])
+                    pretty_dumped = json.dumps(jinja_map, indent=4)
+                else:
+                    jinja_map = {}
+                    pretty_dumped = ''
+            except (ValueError, json.decoder.JSONDecodeError):
                 # pretty_dumped = 'Invalid JSON! \n %s' \
                 #                 % jsonhelp.return_line_no_of_json_value_exc(form.cleaned_data['map_to_render_with'])
-                form = TemplateForm({'map_to_render_with': pretty_dumped,
+                form = TemplateForm({'map_to_render_with': form.cleaned_data['map_to_render_with'],
                                      'string_to_render': form.cleaned_data['string_to_render']})
                 raise
             else:
